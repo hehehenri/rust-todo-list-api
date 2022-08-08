@@ -6,3 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+sqlx = { version = "0.6", features = [ "runtime-tokio-native-tls" , "mysql" ] }
+tokio = { version = "1", features = ["full"] }
+axum = { version = "0.5", features = ["json"] }
+serde = { version = "1" }
+dotenvy = { version ="0.15" }
