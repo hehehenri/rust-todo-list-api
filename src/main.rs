@@ -1,6 +1,8 @@
 mod models;
 mod repositories;
 mod router;
+mod http;
+mod controllers;
 
 use sqlx::{Pool, mysql::MySqlPoolOptions, MySql};
 use std::net::SocketAddr;
@@ -9,14 +11,9 @@ use std::net::SocketAddr;
 async fn main() -> Result<(), sqlx::Error> {
     let pool = set_up_pool().await.unwrap();
 
-    let router = router::new().unwrap();
-
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
 
-    axum::Server::bind(&addr)
-        .serve(router.into_make_service())
-        .await
-        .unwrap();
+    http::serve(pool, addr).await?;
 
     Ok(())
 }

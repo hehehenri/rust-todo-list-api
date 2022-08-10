@@ -1,27 +1,33 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize, FromRow)]
 pub struct Todo {
-    id: u64,
+    id: i32,
     name: String,
     is_checked: bool,
 }
 
-pub struct TodoPayload {
+#[derive(Serialize, Deserialize)]
+pub struct TodoCreatePayload {
     pub name: String,
     pub is_checked: bool,
 }
 
-impl Deserialize for Todo{
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-        where
-            D: serde::Deserializer<'de> {
+#[derive(Serialize, Deserialize)]
+pub struct TodoUpdatePayload {
+  pub name: Option<String>,
+  pub is_checked: Option<bool>,
+}
 
-    }
-};
+#[allow(dead_code)]
+pub struct CreateTodo {
+    pub name: String,
+    pub is_checked: bool,
+}
 
 impl Todo {
-    pub fn new(id: u64, name: String, is_checked: bool) -> Self {
+    pub fn new(id: i32, name: String, is_checked: bool) -> Self {
         Todo {
             id,
             name,

@@ -1,13 +1,20 @@
-use axum::{Router, routing::get};
-use sqlx::Error;
-use crate::repositories::todos;
+use crate::{repositories::TodoRepository, controllers::todo_controller};
+use axum::{Extension, Router, routing::{ get, post, put, delete }};
+use sqlx::{Error, MySqlPool};
 
-pub fn new() -> Result<Router, Error> {
-    let todos_router = Router::new()
-        .route("/", get(todos::all()));
-
+pub fn new(pool: MySqlPool) -> Result<Router, Error> {
     let router = Router::new()
-        .nest("/todos", todos_router);
+        .nest("/todos", todos(pool));
 
     Ok(router)
+}
+
+fn todos(pool: MySqlPool) -> Router {
+    Router::new()
+        .route("/", get(todo_controller::all))
+        .route("/", post(todo_controller::create))
+        .route("/:id", get(todo_controller::find))
+        .route("/:id", put(todo_controller::update))
+        .route("/:id", delete(todo_controller::delete))
+        .layer(Extension(TodoRepository::new(pool)))
 }

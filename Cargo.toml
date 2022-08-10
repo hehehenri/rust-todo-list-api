@@ -8,6 +8,9 @@ edition = "2021"
 [dependencies]
 sqlx = { version = "0.6", features = [ "runtime-tokio-native-tls" , "mysql" ] }
 tokio = { version = "1", features = ["full"] }
-axum = { version = "0.5", features = ["json"] }
-serde = { version = "1" }
-dotenvy = { version ="0.15" }
+axum = { version = "0.5", features = ["json", "macros"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+dotenvy = "0.15"
+axum-macros = "0.2"
+http = "0.2.8"
